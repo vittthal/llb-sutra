@@ -304,11 +304,19 @@ async def pyq_topics(subject: str | None = None) -> list[dict]:
     return [dict(r) for r in rows]
 
 
-# The single-page frontend. Mounted last so it never shadows an API route.
+# The frontend. Mounted last so it never shadows an API route.
+#
+# Prefers the built React bundle (frontend/dist, produced by `npm run build` in web/).
+# Falls back to the plain HTML page if the bundle has not been built, so the API is
+# never left without a usable UI - useful when running the backend alone.
 _FRONTEND = Path(__file__).resolve().parents[2] / "frontend"
-if _FRONTEND.exists():
-    app.mount("/static", StaticFiles(directory=str(_FRONTEND)), name="static")
+_DIST = _FRONTEND / "dist"
+_ROOT = _DIST if (_DIST / "index.html").exists() else _FRONTEND
+
+if (_ROOT / "index.html").exists():
+    if (_ROOT / "assets").exists():
+        app.mount("/assets", StaticFiles(directory=str(_ROOT / "assets")), name="assets")
 
     @app.get("/")
     async def index() -> FileResponse:
-        return FileResponse(str(_FRONTEND / "index.html"))
+        return FileResponse(str(_ROOT / "index.html"))

@@ -1,8 +1,21 @@
-# Production image. Serves the API and the frontend; does NOT ingest.
+# Production image. Serves the API and the React frontend; does NOT ingest.
 #
 # Ingestion (PDF parsing, OCR, embedding) runs on your machine and writes to the same
 # database, so this image needs no tesseract, no poppler and no PDF libraries.
 
+# ---------- stage 1: build the React bundle ----------
+FROM node:20-slim AS web
+WORKDIR /web
+
+# Copy manifests first so `npm ci` is cached and only re-runs when deps change.
+COPY web/package.json web/package-lock.json* ./
+RUN npm install --no-audit --no-fund
+
+COPY web/ ./
+# Vite writes to ../frontend/dist per vite.config.js, so create the sibling directory.
+RUN mkdir -p /frontend && npm run build
+
+# ---------- stage 2: the API ----------
 FROM python:3.12-slim
 
 WORKDIR /app
@@ -20,7 +33,9 @@ RUN pip install --no-cache-dir -r /app/deploy/requirements-runtime.txt
 # Only that one module is used at runtime; the PDF-facing modules are never imported.
 COPY backend /app/backend
 COPY ingest /app/ingest
-COPY frontend /app/frontend
+
+# The built bundle from stage 1. main.py prefers frontend/dist over frontend/index.html.
+COPY --from=web /frontend/dist /app/frontend/dist
 
 # Bake the embedding model into the image rather than downloading it on first request.
 # Without this, the first search after a cold start pays a ~130MB download, which on a
