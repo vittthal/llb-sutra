@@ -1,0 +1,49 @@
+services:
+  db:
+    image: pgvector/pgvector:pg16
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-llb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-llb_local_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-llbsutra}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      # Applied once, on first boot of an empty volume. To re-apply after a schema
+      # change during development: docker compose down -v && docker compose up
+      - ./db/migrations:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-llb} -d ${POSTGRES_DB:-llbsutra}"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  api:
+    build:
+      context: .
+      dockerfile: backend/Dockerfile
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-llb}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-llb_local_dev}
+      POSTGRES_DB: ${POSTGRES_DB:-llbsutra}
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
+      ANTHROPIC_MODEL: ${ANTHROPIC_MODEL:-claude-opus-5}
+      FETCH_USER_AGENT: ${FETCH_USER_AGENT:-}
+      EMBEDDING_MODEL: ${EMBEDDING_MODEL:-BAAI/bge-small-en-v1.5}
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app/backend
+      - ./ingest:/app/ingest
+      - ./data:/app/data
+      - fastembed_cache:/app/.fastembed_cache
+    depends_on:
+      db:
+        condition: service_healthy
+    command: uvicorn backend.app.main:app --host 0.0.0.0 --port 8000 --reload
+
+volumes:
+  pgdata:
+  fastembed_cache:

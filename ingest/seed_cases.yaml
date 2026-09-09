@@ -1,0 +1,335 @@
+# Leading judgments per Sem V subject, tagged to topics.
+#
+# These are the cases that actually get asked, so the corpus starts with them rather
+# than with whatever a crawl happens to find first.
+#
+# VERIFY BEFORE INGESTING. Names and years here are a starting list. The fetcher
+# resolves each against DigiSCR (digiscr.sci.gov.in) — the Supreme Court's own official
+# reporter — and the FETCHED record populates the database, not this file.
+#
+# Once PYQ analytics is running it will show which cases your examiners actually
+# favour; extend this list from that data.
+
+cases:
+  # --- CPC & Limitation Act ------------------------------------------------
+  - name: Dhulabhai v. State of Madhya Pradesh
+    year: 1968
+    subject: CPC
+    topics: [jurisdiction-of-civil-courts]
+    note: Section 9 - when the jurisdiction of a civil court is barred.
+
+  - name: Kiran Singh v. Chaman Paswan
+    year: 1954
+    subject: CPC
+    topics: [jurisdiction-of-civil-courts]
+    note: A decree passed without jurisdiction is a nullity.
+
+  - name: Satyadhyan Ghosal v. Deorajin Debi
+    year: 1960
+    subject: CPC
+    topics: [res-judicata]
+    note: Section 11 - res judicata.
+
+  - name: Daryao v. State of Uttar Pradesh
+    year: 1961
+    subject: CPC
+    topics: [res-judicata]
+    note: Res judicata applied to writ petitions.
+
+  - name: Gurbux Singh v. Bhooralal
+    year: 1964
+    subject: CPC
+    topics: [order-2-rule-2]
+    note: Order II Rule 2 - splitting of claims.
+
+  - name: T. Arivandandam v. T.V. Satyapal
+    year: 1977
+    subject: CPC
+    topics: [rejection-of-plaint]
+    note: Order VII Rule 11 - vexatious and meritless plaints.
+
+  - name: Saleem Bhai v. State of Maharashtra
+    year: 2003
+    subject: CPC
+    topics: [rejection-of-plaint]
+
+  - name: Dalpat Kumar v. Prahlad Singh
+    year: 1992
+    subject: CPC
+    topics: [temporary-injunction]
+    note: Order XXXIX - prima facie case, balance of convenience, irreparable injury.
+
+  - name: Gujarat Bottling Co. v. Coca Cola Co.
+    year: 1995
+    subject: CPC
+    topics: [temporary-injunction]
+
+  - name: Salem Advocate Bar Association v. Union of India (II)
+    year: 2005
+    subject: CPC
+    topics: [cpc-amendments]
+
+  - name: Collector, Land Acquisition, Anantnag v. Mst. Katiji
+    year: 1987
+    subject: CPC
+    topics: [condonation-of-delay]
+    note: Section 5, Limitation Act - liberal construction of sufficient cause.
+
+  - name: N. Balakrishnan v. M. Krishnamurthy
+    year: 1998
+    subject: CPC
+    topics: [condonation-of-delay]
+
+  - name: Basawaraj v. Special Land Acquisition Officer
+    year: 2013
+    subject: CPC
+    topics: [condonation-of-delay]
+    note: Limits of the liberal approach.
+
+  # --- BNSS (leading authorities are CrPC-era; principles carry across) -----
+  - name: Lalita Kumari v. Government of Uttar Pradesh
+    year: 2014
+    subject: BNSS
+    topics: [fir-registration]
+    note: Registration of FIR is mandatory for cognizable offences.
+
+  - name: Arnesh Kumar v. State of Bihar
+    year: 2014
+    subject: BNSS
+    topics: [arrest]
+    note: Arrest guidelines. Section 41 CrPC -> Section 35 BNSS.
+
+  - name: Joginder Kumar v. State of Uttar Pradesh
+    year: 1994
+    subject: BNSS
+    topics: [arrest]
+
+  - name: D.K. Basu v. State of West Bengal
+    year: 1997
+    subject: BNSS
+    topics: [arrest, custodial-safeguards]
+
+  - name: State of Haryana v. Bhajan Lal
+    year: 1992
+    subject: BNSS
+    topics: [quashing-of-fir]
+    note: Section 482 CrPC -> Section 528 BNSS. The seven categories.
+
+  - name: Nandini Satpathy v. P.L. Dani
+    year: 1978
+    subject: BNSS
+    topics: [investigation, self-incrimination]
+
+  - name: Selvi v. State of Karnataka
+    year: 2010
+    subject: BNSS
+    topics: [investigation, self-incrimination]
+    note: Narco-analysis, polygraph, brain mapping.
+
+  - name: Gurbaksh Singh Sibbia v. State of Punjab
+    year: 1980
+    subject: BNSS
+    topics: [anticipatory-bail]
+
+  - name: Sushila Aggarwal v. State (NCT of Delhi)
+    year: 2020
+    subject: BNSS
+    topics: [anticipatory-bail]
+    note: Constitution Bench - anticipatory bail need not be time-limited.
+
+  - name: Satender Kumar Antil v. Central Bureau of Investigation
+    year: 2022
+    subject: BNSS
+    topics: [bail]
+    note: Bail guidelines by offence category.
+
+  - name: Vinubhai Haribhai Malaviya v. State of Gujarat
+    year: 2019
+    subject: BNSS
+    topics: [investigation]
+    note: Further investigation.
+
+  # --- Juvenile Justice Act 2015 -------------------------------------------
+  - name: Pratap Singh v. State of Jharkhand
+    year: 2005
+    subject: BNSS
+    topics: [juvenile-justice, age-determination]
+    note: Reckoning date for determining juvenility.
+
+  - name: Salil Bali v. Union of India
+    year: 2013
+    subject: BNSS
+    topics: [juvenile-justice]
+    note: Constitutional challenge to the age of juvenility.
+
+  - name: Dr. Subramanian Swamy v. Raju
+    year: 2014
+    subject: BNSS
+    topics: [juvenile-justice]
+
+  - name: Shilpa Mittal v. State (NCT of Delhi)
+    year: 2020
+    subject: BNSS
+    topics: [juvenile-justice, heinous-offences]
+    note: Meaning of heinous offence under the JJ Act 2015.
+
+  - name: Barun Chandra Thakur v. Master Bholu
+    year: 2022
+    subject: BNSS
+    topics: [juvenile-justice, preliminary-assessment]
+
+  # --- POCSO Act 2012 -------------------------------------------------------
+  - name: Attorney General for India v. Satish
+    year: 2021
+    subject: BNSS
+    topics: [pocso]
+    note: Reversed the Bombay HC "skin to skin" reading of sexual assault.
+
+  - name: Nipun Saxena v. Union of India
+    year: 2019
+    subject: BNSS
+    topics: [pocso, victim-identity]
+
+  - name: Alakh Alok Srivastava v. Union of India
+    year: 2018
+    subject: BNSS
+    topics: [pocso, trial-procedure]
+
+  - name: Independent Thought v. Union of India
+    year: 2017
+    subject: BNSS
+    topics: [pocso, child-marriage]
+
+  - name: Jarnail Singh v. State of Haryana
+    year: 2013
+    subject: BNSS
+    topics: [age-determination]
+
+  # --- Labour Law & Industrial Relations II --------------------------------
+  - name: Bangalore Water Supply and Sewerage Board v. A. Rajappa
+    year: 1978
+    subject: LABOUR2
+    topics: [definition-of-industry]
+    note: The leading authority on "industry".
+
+  - name: State of Bombay v. Hospital Mazdoor Sabha
+    year: 1960
+    subject: LABOUR2
+    topics: [definition-of-industry]
+    note: Triple test.
+
+  - name: D.N. Banerji v. P.R. Mukherjee
+    year: 1953
+    subject: LABOUR2
+    topics: [industrial-dispute]
+
+  - name: Workmen of Dimakuchi Tea Estate v. Management of Dimakuchi Tea Estate
+    year: 1958
+    subject: LABOUR2
+    topics: [industrial-dispute]
+    note: Scope of "any person" in section 2(k).
+
+  - name: Excel Wear v. Union of India
+    year: 1978
+    subject: LABOUR2
+    topics: [closure, chapter-vb]
+
+  - name: Santosh Gupta v. State Bank of Patiala
+    year: 1980
+    subject: LABOUR2
+    topics: [retrenchment]
+
+  - name: Punjab Land Development and Reclamation Corporation v. Presiding Officer
+    year: 1990
+    subject: LABOUR2
+    topics: [retrenchment]
+
+  - name: Steel Authority of India Ltd. v. National Union Waterfront Workers
+    year: 2001
+    subject: LABOUR2
+    topics: [contract-labour]
+    note: Abolition of contract labour; overruled Air India Statutory Corporation.
+
+  - name: Secretary, State of Karnataka v. Umadevi
+    year: 2006
+    subject: LABOUR2
+    topics: [regularisation]
+
+  - name: Gujarat Steel Tubes Ltd. v. Gujarat Steel Tubes Mazdoor Sabha
+    year: 1980
+    subject: LABOUR2
+    topics: [strike, dismissal]
+
+  - name: Syndicate Bank v. K. Umesh Nayak
+    year: 1994
+    subject: LABOUR2
+    topics: [strike, wages]
+
+  - name: T.K. Rangarajan v. Government of Tamil Nadu
+    year: 2003
+    subject: LABOUR2
+    topics: [strike]
+
+  - name: Rajasthan State Road Transport Corporation v. Krishna Kant
+    year: 1995
+    subject: LABOUR2
+    topics: [jurisdiction-civil-court-vs-id-act]
+
+  # --- Public International Law: Indian Supreme Court (from DigiSCR) --------
+  - name: Maganbhai Ishwarbhai Patel v. Union of India
+    year: 1970
+    subject: PIL
+    topics: [treaty-making-power]
+
+  - name: Gramophone Company of India v. Birendra Bahadur Pandey
+    year: 1984
+    subject: PIL
+    topics: [international-law-and-municipal-law]
+
+  - name: Jolly George Varghese v. Bank of Cochin
+    year: 1980
+    subject: PIL
+    topics: [international-law-and-municipal-law]
+
+  - name: Vishaka v. State of Rajasthan
+    year: 1997
+    subject: PIL
+    topics: [treaties-as-gap-filler]
+
+# --- Public International Law: ICJ / PCIJ ---------------------------------
+# Not on DigiSCR. Fetched from icj-cij.org, which publishes judgments as PDFs.
+icj_cases:
+  - name: S.S. Lotus (France v. Turkey)
+    year: 1927
+    court: Permanent Court of International Justice
+    topics: [jurisdiction, sources-of-international-law]
+  - name: Corfu Channel (United Kingdom v. Albania)
+    year: 1949
+    topics: [state-responsibility]
+  - name: Reparation for Injuries Suffered in the Service of the United Nations
+    year: 1949
+    topics: [international-legal-personality]
+  - name: Asylum Case (Colombia v. Peru)
+    year: 1950
+    topics: [regional-custom]
+  - name: Fisheries Case (United Kingdom v. Norway)
+    year: 1951
+    topics: [custom, baselines]
+  - name: Nottebohm (Liechtenstein v. Guatemala)
+    year: 1955
+    topics: [nationality, diplomatic-protection]
+  - name: North Sea Continental Shelf
+    year: 1969
+    topics: [custom, opinio-juris]
+  - name: Barcelona Traction, Light and Power Company
+    year: 1970
+    topics: [erga-omnes, diplomatic-protection]
+  - name: Military and Paramilitary Activities in and against Nicaragua
+    year: 1986
+    topics: [use-of-force, custom]
+  - name: Legality of the Threat or Use of Nuclear Weapons
+    year: 1996
+    topics: [use-of-force, advisory-opinion]
+  - name: Jadhav (India v. Pakistan)
+    year: 2019
+    topics: [consular-relations, vccr]

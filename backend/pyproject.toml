@@ -1,0 +1,52 @@
+[project]
+name = "llbsutra"
+version = "0.1.0"
+description = "Syllabus-aligned LL.B. study platform with source-controlled legal retrieval"
+requires-python = ">=3.11"
+
+dependencies = [
+    "fastapi>=0.115",
+    "uvicorn[standard]>=0.30",
+    "pydantic>=2.8",
+    "pydantic-settings>=2.4",
+    "asyncpg>=0.29",
+    "httpx>=0.27",
+    "truststore>=0.9",        # OS trust store: some govt CAs are absent from certifi
+    "pyyaml>=6.0",
+    "pymupdf>=1.24",          # PDF text extraction
+    "pytesseract>=0.3.10",    # OCR fallback for scanned PDFs
+    "pillow>=10.4",
+    "fastembed>=0.3",         # local CPU embeddings, BAAI/bge-small-en-v1.5
+    "python-slugify>=8.0",
+    "rich>=13.7",             # ingest CLI output
+    "typer>=0.12",
+]
+
+[project.optional-dependencies]
+# Not needed until Phase 3. Keeps the Phase 1/2 image small and the API surface honest.
+ai = [
+    "anthropic>=0.40",
+    "langgraph>=0.2",
+]
+dev = [
+    "pytest>=8.3",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.6",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+# Dependency-only install. Code is imported via PYTHONPATH=/app as `backend.app.*`
+# and `ingest.*`, which keeps one import style across the API and the ingest CLI.
+py-modules = []
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]

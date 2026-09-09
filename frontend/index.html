@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>LLB Sutra — Semester V</title>
+<style>
+  :root{
+    --bg:#faf9f6; --panel:#fff; --ink:#1c1b19; --muted:#6d6b64; --faint:#918e85;
+    --line:#e6e2d9; --accent:#7b1e2b; --accent2:#a03040; --soft:#f6ecec;
+    --ok:#2c6e49; --ok-soft:#e8f2ec; --warn:#a8660a; --warn-soft:#fdf3e3;
+    --mono:ui-monospace,"SF Mono",Menlo,Consolas,monospace;
+    --serif:Georgia,"Iowan Old Style","Times New Roman",serif;
+    --sans:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+    --r:10px;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--serif)}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 20px}
+
+  header{background:var(--panel);border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20}
+  .brand{display:flex;align-items:baseline;gap:12px;padding:16px 0 0}
+  h1{margin:0;font-size:21px;letter-spacing:.01em}
+  h1 span{color:var(--accent)}
+  .brand small{color:var(--faint);font:12px var(--sans);letter-spacing:.03em}
+  nav{display:flex;gap:2px;margin-top:12px;overflow-x:auto}
+  nav button{background:none;border:none;border-bottom:2.5px solid transparent;
+    padding:9px 14px;font:15px var(--sans);color:var(--muted);cursor:pointer;white-space:nowrap}
+  nav button:hover{color:var(--ink)}
+  nav button.on{color:var(--accent);border-bottom-color:var(--accent);font-weight:600}
+
+  main{padding:26px 0 60px}
+  h2{font-size:19px;margin:0 0 4px}
+  .lede{color:var(--muted);font:14px/1.5 var(--sans);margin:0 0 20px}
+
+  .searchbar{display:flex;gap:8px;flex-wrap:wrap}
+  input[type=search],select{font:15px var(--sans);padding:12px 14px;border:1px solid var(--line);
+    border-radius:var(--r);background:var(--panel);color:var(--ink)}
+  input[type=search]{flex:1;min-width:230px}
+  input[type=search]:focus,select:focus{outline:2px solid var(--soft);border-color:var(--accent)}
+  button.go{background:var(--accent);color:#fff;border:none;border-radius:var(--r);
+    padding:12px 22px;font:15px var(--sans);font-weight:600;cursor:pointer}
+  button.go:hover{background:var(--accent2)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:12px 0 20px}
+  .chip{font:13px var(--sans);background:var(--panel);border:1px solid var(--line);
+    border-radius:20px;padding:6px 13px;cursor:pointer;color:var(--muted)}
+  .chip:hover{border-color:var(--accent);color:var(--accent);background:var(--soft)}
+
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    padding:16px 18px;margin-bottom:12px}
+  .card.pin{border-color:var(--accent);box-shadow:0 0 0 3px var(--soft)}
+  .cite{font:600 12px var(--mono);color:var(--accent);margin-bottom:6px}
+  .head{font-weight:700;font-size:15.5px;margin-bottom:6px}
+  .txt{font-size:15px;white-space:pre-wrap}
+  .meta{margin-top:11px;display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+  .tag{font:10.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;padding:3px 7px;
+    border-radius:4px;background:var(--bg);border:1px solid var(--line);color:var(--faint)}
+  .tag.pin{background:var(--soft);color:var(--accent);border-color:#e8d4d6}
+  .tag.trunc{background:var(--warn-soft);color:var(--warn);border-color:#f0dfc0}
+  .tag.hot{background:var(--soft);color:var(--accent);border-color:#e8d4d6;font-weight:700}
+
+  /* syllabus */
+  .subj{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    margin-bottom:14px;overflow:hidden}
+  .subj>summary{padding:15px 18px;cursor:pointer;list-style:none;display:flex;
+    justify-content:space-between;align-items:center;gap:12px}
+  .subj>summary::-webkit-details-marker{display:none}
+  .subj[open]>summary{border-bottom:1px solid var(--line);background:var(--bg)}
+  .subj .code{font:700 11px var(--mono);color:#fff;background:var(--accent);
+    padding:3px 8px;border-radius:4px;letter-spacing:.05em}
+  .subj .nm{font-weight:700;font-size:15.5px;flex:1;margin-left:11px}
+  .subj .ct{font:12px var(--sans);color:var(--faint);white-space:nowrap}
+  .mod{padding:14px 18px;border-bottom:1px dashed var(--line)}
+  .mod:last-child{border-bottom:none}
+  .mod-h{display:flex;gap:10px;align-items:baseline;margin-bottom:7px}
+  .mod-n{font:700 11px var(--mono);color:var(--accent);background:var(--soft);
+    padding:2px 8px;border-radius:4px;white-space:nowrap}
+  .mod-t{font-weight:600;font-size:14.5px}
+  .tops{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .top{font:13px var(--sans);background:var(--bg);border:1px solid var(--line);
+    border-radius:6px;padding:5px 10px;cursor:pointer;color:var(--muted);text-align:left}
+  .top:hover{border-color:var(--accent);color:var(--accent);background:var(--soft)}
+
+  table{width:100%;border-collapse:collapse;background:var(--panel);
+    border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--line);font-size:14.5px}
+  th{background:var(--bg);font:600 11.5px var(--sans);text-transform:uppercase;
+    letter-spacing:.06em;color:var(--faint)}
+  tr:last-child td{border-bottom:none}
+  tbody tr:hover{background:var(--bg)}
+  td.num{text-align:right;font-family:var(--mono)}
+  .bar{height:8px;background:var(--accent);border-radius:4px;display:inline-block;
+    min-width:4px;vertical-align:middle;margin-right:8px;opacity:.85}
+
+  .stats{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+  .stat{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);
+    padding:13px 17px;flex:1;min-width:110px}
+  .stat b{display:block;font:600 22px var(--mono)}
+  .stat span{font:11.5px var(--sans);color:var(--faint);text-transform:uppercase;letter-spacing:.05em}
+  .empty{color:var(--faint);text-align:center;padding:40px;font-style:italic}
+  .q{padding:9px 0;border-bottom:1px dotted var(--line)}
+  .q:last-child{border:none}
+  .qno{font:11.5px var(--mono);color:var(--accent);margin-right:8px}
+  .q button{background:none;border:none;color:var(--faint);cursor:pointer;
+    font:12px var(--sans);padding:0;margin-left:6px;text-decoration:underline}
+  .q button:hover{color:var(--accent)}
+  .note{background:var(--warn-soft);border:1px solid #f0dfc0;border-radius:var(--r);
+    padding:12px 15px;font:13.5px/1.5 var(--sans);color:#6d4a12;margin-bottom:18px}
+  footer{color:var(--faint);font:12px var(--sans);text-align:center;padding:30px 20px}
+  @media(max-width:600px){ .brand{flex-direction:column;gap:2px} .stat{min-width:44%} }
+</style>
+</head>
+<body>
+<header><div class="wrap">
+  <div class="brand"><h1>LLB <span>Sutra</span></h1>
+    <small>MUMBAI UNIVERSITY · LL.B. SEMESTER V</small></div>
+  <nav>
+    <button data-tab="syllabus" class="on">Syllabus</button>
+    <button data-tab="search">Search</button>
+    <button data-tab="topics">What gets asked</button>
+    <button data-tab="pyq">Past papers</button>
+    <button data-tab="library">Library</button>
+  </nav>
+</div></header>
+
+<main><div class="wrap">
+
+  <section id="syllabus">
+    <h2>Semester V syllabus</h2>
+    <p class="lede">Every module and topic, from the university syllabus.
+       Click any topic to search the bare acts, judgments and notes for it.</p>
+    <div id="syllabusBody"><div class="empty">Loading…</div></div>
+  </section>
+
+  <section id="search" hidden>
+    <h2>Search the corpus</h2>
+    <p class="lede">Bare acts, treaties, question papers and notes — every answer cited.
+       Ask for a section by number and you get that exact section.</p>
+    <div class="searchbar">
+      <input type="search" id="q" placeholder="e.g. Section 35 BNSS, res judicata, gig worker…">
+      <select id="subj"><option value="">All subjects</option></select>
+      <button class="go" id="btn">Search</button>
+    </div>
+    <div class="chips" id="chips"></div>
+    <div id="results"></div>
+  </section>
+
+  <section id="topics" hidden>
+    <h2>What gets asked</h2>
+    <p class="lede">Topic frequency counted from the 75-25 question papers in the corpus —
+       measured, not guessed. Revise top-down.</p>
+    <div class="searchbar" style="margin-bottom:16px">
+      <select id="topicSubj"><option value="">All subjects</option></select>
+    </div>
+    <div id="topicsTable"></div>
+  </section>
+
+  <section id="pyq" hidden>
+    <h2>Past papers</h2>
+    <p class="lede">Questions from the 75-25 papers, grouped by exam.</p>
+    <div class="searchbar" style="margin-bottom:16px">
+      <select id="pyqSubj"><option value="">All subjects</option></select>
+    </div>
+    <div id="pyqList"></div>
+  </section>
+
+  <section id="library" hidden>
+    <h2>Library</h2>
+    <p class="lede">What is loaded, and how completely each act was parsed.</p>
+    <div class="stats" id="stats"></div>
+    <div id="actsTable"></div>
+  </section>
+
+</div></main>
+
+<footer>Bare acts from India Code · treaties from the UN · questions from past papers ·
+  every passage carries its citation</footer>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => (s??'').replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const api = async p => { const r = await fetch(p); if(!r.ok) throw new Error(await r.text()); return r.json(); };
+const loaded = {};
+
+function show(tab){
+  document.querySelectorAll('nav button').forEach(x => x.classList.toggle('on', x.dataset.tab === tab));
+  ['syllabus','search','topics','pyq','library'].forEach(id => $('#'+id).hidden = (id !== tab));
+  if(tab === 'syllabus' && !loaded.syl){ loaded.syl = 1; loadSyllabus(); }
+  if(tab === 'topics') loadTopics();
+  if(tab === 'pyq') loadPyq();
+  if(tab === 'library' && !loaded.lib){ loaded.lib = 1; loadLibrary(); }
+}
+document.querySelectorAll('nav button').forEach(b => b.onclick = () => show(b.dataset.tab));
+
+/* ---------- syllabus ---------- */
+async function loadSyllabus(){
+  const el = $('#syllabusBody');
+  try{
+    const subs = await api('/syllabus');
+    if(!subs.length){ el.innerHTML = '<div class="empty">No syllabus loaded.</div>'; return; }
+    el.innerHTML = subs.map((s, i) => {
+      const nTopics = s.modules.reduce((a,m) => a + m.topics.length, 0);
+      return `<details class="subj" ${i===0?'open':''}>
+        <summary>
+          <span class="code">${esc(s.code)}</span>
+          <span class="nm">${esc(s.name)}</span>
+          <span class="ct">${s.modules.length} modules · ${nTopics} topics</span>
+        </summary>
+        ${s.modules.length ? s.modules.map(m => `
+          <div class="mod">
+            <div class="mod-h">
+              <span class="mod-n">MODULE ${m.number}</span>
+              <span class="mod-t">${esc(m.title)}</span>
+            </div>
+            ${m.topics.length ? `<div class="tops">${m.topics.map(t =>
+              `<button class="top" data-q="${esc(t.title.slice(0,70))}">${esc(t.title.slice(0,70))}</button>`
+            ).join('')}</div>` : '<div class="ct" style="font:12px var(--sans);color:var(--faint)">Topics not itemised in the source syllabus.</div>'}
+          </div>`).join('')
+          : '<div class="empty">Modules not yet parsed for this paper.</div>'}
+      </details>`;
+    }).join('');
+    el.querySelectorAll('.top').forEach(b => b.onclick = () => {
+      show('search'); $('#q').value = b.dataset.q; doSearch();
+    });
+  }catch(e){ el.innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+
+/* ---------- search ---------- */
+async function doSearch(){
+  const q = $('#q').value.trim();
+  if(!q) return;
+  $('#results').innerHTML = '<div class="empty">Searching…</div>';
+  try{
+    const d = await api(`/search?q=${encodeURIComponent(q)}&subject=${$('#subj').value}&limit=12`);
+    if(!d.results.length){
+      $('#results').innerHTML = '<div class="empty">Nothing found. Try a section number, or fewer words.</div>'; return;
+    }
+    $('#results').innerHTML = d.results.map(r => `
+      <div class="card ${r.pinned?'pin':''}">
+        <div class="cite">${esc(r.citation)}</div>
+        ${r.heading && r.heading !== r.citation ? `<div class="head">${esc(r.heading)}</div>` : ''}
+        <div class="txt">${esc(r.text.length > 760 ? r.text.slice(0,760)+'…' : r.text)}</div>
+        <div class="meta">
+          ${r.pinned ? '<span class="tag pin">exact section</span>' : ''}
+          ${r.matched_by.map(m => `<span class="tag">${esc(m)}</span>`).join('')}
+          <span class="tag">${esc(r.doc_type.replace('_',' '))}</span>
+          ${r.truncated ? '<span class="tag trunc">licensed — excerpt only</span>' : ''}
+        </div>
+      </div>`).join('');
+  }catch(e){ $('#results').innerHTML = `<div class="empty">${esc(e.message)}</div>`; }
+}
+$('#btn').onclick = doSearch;
+$('#q').addEventListener('keydown', e => { if(e.key === 'Enter') doSearch(); });
+
+['Section 35 BNSS','res judicata','anticipatory bail','gig worker','summons',
+ 'juvenile justice','law of treaties'].forEach(t => {
+  const b = document.createElement('button');
+  b.className = 'chip'; b.textContent = t;
+  b.onclick = () => { $('#q').value = t; doSearch(); };
+  $('#chips').appendChild(b);
+});
+
+/* ---------- what gets asked ---------- */
+async function loadTopics(){
+  const el = $('#topicsTable');
+  el.innerHTML = '<div class="empty">Loading…</div>';
+  const d = await api('/pyq/topics?subject=' + $('#topicSubj').value);
+  if(!d.length){ el.innerHTML = '<div class="empty">No questions loaded.</div>'; return; }
+  const max = Math.max(...d.map(t => t.times_asked));
+  el.innerHTML = `<table><thead><tr><th>Topic</th><th>Subject</th>
+      <th style="text-align:right">Asked</th><th style="text-align:right">Papers</th>
+      <th style="text-align:right">Years</th></tr></thead><tbody>
+    ${d.map(t => `<tr style="cursor:pointer" data-q="${esc(t.topic)}">
+      <td><span class="bar" style="width:${Math.round(t.times_asked/max*100)}px"></span>${esc(t.topic)}
+        ${t.times_asked >= max*0.6 ? '<span class="tag hot">high yield</span>' : ''}</td>
+      <td>${t.subjects.map(s => `<span class="tag">${esc(s)}</span>`).join(' ')}</td>
+      <td class="num"><b>${t.times_asked}</b></td>
+      <td class="num">${t.in_papers}</td>
+      <td class="num">${t.first_seen === t.last_seen ? t.first_seen : t.first_seen+'–'+t.last_seen}</td>
+    </tr>`).join('')}</tbody></table>`;
+  el.querySelectorAll('tr[data-q]').forEach(tr => tr.onclick = () => {
+    show('search'); $('#q').value = tr.dataset.q.split(' / ')[0]; doSearch();
+  });
+}
+$('#topicSubj').onchange = loadTopics;
+
+/* ---------- past papers ---------- */
+async function loadPyq(){
+  const el = $('#pyqList');
+  el.innerHTML = '<div class="empty">Loading…</div>';
+  const d = await api(`/pyq?subject=${$('#pyqSubj').value}&limit=400`);
+  if(!d.length){ el.innerHTML = '<div class="empty">No questions.</div>'; return; }
+  const byExam = {};
+  d.forEach(q => (byExam[`${q.subject} — ${q.exam}`] ||= []).push(q));
+  el.innerHTML = Object.entries(byExam).map(([k, qs]) => `
+    <div class="card"><div class="cite">${esc(k)} · ${qs.length} questions</div>
+      ${qs.map(q => `<div class="q"><span class="qno">Q${esc(q.question_no)}</span>${esc(q.question_text.slice(0,320))}
+        <button data-q="${esc(q.question_text.slice(0,60))}">find material</button></div>`).join('')}
+    </div>`).join('');
+  el.querySelectorAll('.q button').forEach(b => b.onclick = () => {
+    show('search'); $('#q').value = b.dataset.q; doSearch();
+  });
+}
+$('#pyqSubj').onchange = loadPyq;
+
+/* ---------- library ---------- */
+async function loadLibrary(){
+  const [s, acts] = await Promise.all([api('/stats'), api('/acts')]);
+  $('#stats').innerHTML = [
+    ['Sections', s.provisions], ['Documents', s.documents], ['Questions', s.pyqs],
+    ['Passages', s.chunks], ['Searchable by meaning', s.chunks_embedded],
+  ].map(([l,v]) => `<div class="stat"><b>${v}</b><span>${l}</span></div>`).join('');
+  $('#actsTable').innerHTML = `<table><thead><tr><th>Act</th>
+    <th style="text-align:right">Year</th><th style="text-align:right">Sections parsed</th>
+    </tr></thead><tbody>${acts.map(a => `<tr><td>${esc(a.short_title)}</td>
+      <td class="num">${a.year ?? ''}</td><td class="num">${a.sections}</td></tr>`).join('')}
+    </tbody></table>`;
+}
+
+/* subject dropdowns */
+api('/subjects').then(subs => {
+  const opts = subs.map(s => `<option value="${esc(s.code)}">${esc(s.code)} — ${esc(s.name.slice(0,48))}</option>`).join('');
+  ['#subj','#pyqSubj','#topicSubj'].forEach(sel => $(sel).innerHTML += opts);
+});
+
+loadSyllabus();
+</script>
+</body>
+</html>

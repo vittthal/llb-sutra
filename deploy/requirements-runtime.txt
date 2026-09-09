@@ -1,0 +1,18 @@
+# Runtime dependencies ONLY — what the deployed API needs to serve requests.
+#
+# Deliberately excludes the ingest stack (pymupdf, pytesseract, pillow, typer, rich,
+# httpx, pyyaml). Ingestion runs on your laptop and writes to the database directly,
+# so the server never parses a PDF or runs OCR. Leaving those out cuts the image by
+# hundreds of megabytes and removes the tesseract system package entirely — which
+# matters when the free tier gives you 512MB of RAM.
+
+fastapi>=0.115
+uvicorn[standard]>=0.30
+pydantic>=2.8
+pydantic-settings>=2.4
+asyncpg>=0.29
+
+# Semantic search. ~130MB model + onnxruntime, and the main memory cost on a small
+# instance. Set ENABLE_VECTOR_SEARCH=false to run keyword-only and drop this cost;
+# the app degrades cleanly rather than erroring.
+fastembed>=0.8

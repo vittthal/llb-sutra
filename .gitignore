@@ -1,0 +1,33 @@
+# Source PDFs — never commit. Bare acts are re-fetchable; textbooks are copyrighted.
+data/
+
+# Secrets
+.env
+.env.local
+
+# Your own source manifest — points at material that is yours, not the project's
+ingest/sources.local.yaml
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Node
+node_modules/
+dist/
+.vite/
+
+# Embedding model cache
+.fastembed_cache/
+
+# OS / editor
+Thumbs.db
+.DS_Store
+.idea/
+.vscode/

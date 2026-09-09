@@ -1,0 +1,304 @@
+# The ingest contract. NOTHING enters the database without an entry here.
+#
+# licence values (see backend/app/licence.py):
+#   public          treaties, UN/ICJ material          -> full text servable
+#   govt-public     Indian bare acts, judgments        -> full text servable
+#   owned-licensed  books/notes you legally own        -> retrieval only, 200-char excerpt
+#   excerpt-only    most restricted                    -> 50-char excerpt
+#
+# Verify URLs with:  python -m ingest.fetch_sources --dry-run
+
+subjects:
+  - code: CPC
+    name: Civil Procedure Code, 1908 & Limitation Act, 1963
+    slug: cpc-limitation
+    semester: 5
+  - code: BNSS
+    name: >-
+      Bharatiya Nagarik Suraksha Sanhita, 2023; the Juvenile Justice
+      (Care & Protection of Children) Act, 2015; and the Protection of
+      Children from Sexual Offences (POCSO) Act, 2012
+    slug: bnss
+    semester: 5
+  - code: LABOUR2
+    name: Labour Law & Industrial Relations - II
+    slug: labour-law-2
+    semester: 5
+  - code: PIL
+    name: Public International Law
+    slug: public-international-law
+    semester: 5
+  - code: MOOT
+    name: Moot Court Exercise & Internship (Practical Training - III)
+    slug: moot-court
+    semester: 5
+
+documents:
+  # --- CPC & Limitation ----------------------------------------------------
+  - title: The Code of Civil Procedure, 1908
+    slug: cpc-1908
+    doc_type: bare_act
+    licence: govt-public
+    subject: CPC
+    act:
+      short_title: Code of Civil Procedure
+      year: 1908
+      act_number: Act No. 5 of 1908
+    fetch:
+      - https://cdnbbsr.s3waas.gov.in/s3ec045421e013565f7f1afa0cfe8ad87a/uploads/2023/12/2023123197.pdf
+      - https://www.indiacode.nic.in/bitstream/123456789/2191/1/A1908-05.pdf
+      - https://indiacode.gov.in/bitstream/123456789/2191/1/A1908-05.pdf
+
+  - title: The Limitation Act, 1963
+    slug: limitation-act-1963
+    doc_type: bare_act
+    licence: govt-public
+    subject: CPC
+    act:
+      short_title: Limitation Act
+      year: 1963
+      act_number: Act No. 36 of 1963
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/1595/1/A1963-36.pdf
+      - https://indiacode.gov.in/bitstream/123456789/1595/1/A1963-36.pdf
+
+  # --- BNSS (+ BNS and BSA for cross-reference and old->new mapping) --------
+  - title: The Bharatiya Nagarik Suraksha Sanhita, 2023
+    slug: bnss-2023
+    doc_type: bare_act
+    licence: govt-public
+    subject: BNSS
+    act:
+      short_title: Bharatiya Nagarik Suraksha Sanhita
+      year: 2023
+      act_number: Act No. 46 of 2023
+    fetch:
+      # Verified reachable during planning.
+      - https://www.indiacode.nic.in/bitstream/123456789/20099/1/A202346.pdf
+      - https://www.mha.gov.in/sites/default/files/2024-04/250884_2_english_01042024.pdf
+      - https://prsindia.org/files/bills_acts/bills_parliament/2023/Bharatiya_Nagarik_Suraksha_Sanhita,_2023.pdf
+
+  - title: The Bharatiya Nyaya Sanhita, 2023
+    slug: bns-2023
+    doc_type: bare_act
+    licence: govt-public
+    subject: BNSS
+    act:
+      short_title: Bharatiya Nyaya Sanhita
+      year: 2023
+      act_number: Act No. 45 of 2023
+    fetch:
+      - https://www.mha.gov.in/sites/default/files/250883_english_01042024.pdf
+      - https://www.indiacode.nic.in/bitstream/123456789/20062/1/a2023-45.pdf
+
+  - title: The Bharatiya Sakshya Adhiniyam, 2023
+    slug: bsa-2023
+    doc_type: bare_act
+    licence: govt-public
+    subject: BNSS
+    act:
+      short_title: Bharatiya Sakshya Adhiniyam
+      year: 2023
+      act_number: Act No. 47 of 2023
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/20063/1/a2023-47.pdf
+
+  - title: The Juvenile Justice (Care and Protection of Children) Act, 2015
+    slug: jj-act-2015
+    doc_type: bare_act
+    licence: govt-public
+    subject: BNSS
+    act:
+      short_title: Juvenile Justice (Care and Protection of Children) Act
+      year: 2015
+      act_number: Act No. 2 of 2016
+    indiacode_query: Juvenile Justice Care and Protection of Children Act 2015
+    fetch:
+      - https://cdnbbsr.s3waas.gov.in/s3850af92f8d9903e7a4e0559a98ecc857/uploads/2022/08/2022080585.pdf
+
+  - title: The Protection of Children from Sexual Offences Act, 2012
+    slug: pocso-2012
+    doc_type: bare_act
+    licence: govt-public
+    subject: BNSS
+    act:
+      short_title: Protection of Children from Sexual Offences Act
+      year: 2012
+      act_number: Act No. 32 of 2012
+    indiacode_query: Protection of Children from Sexual Offences Act 2012
+    fetch:
+      - https://cdnbbsr.s3waas.gov.in/s3850af92f8d9903e7a4e0559a98ecc857/uploads/2022/08/2022080592.pdf
+
+  - title: The Code of Criminal Procedure, 1973
+    slug: crpc-1973
+    doc_type: bare_act
+    licence: govt-public
+    subject: BNSS
+    note: Repealed by BNSS but required to build provision_map (CrPC -> BNSS).
+    act:
+      short_title: Code of Criminal Procedure
+      year: 1973
+      act_number: Act No. 2 of 1974
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/15272/1/the_code_of_criminal_procedure%2C_1973.pdf
+
+  # --- Labour Law II -------------------------------------------------------
+  - title: The Industrial Disputes Act, 1947
+    slug: id-act-1947
+    doc_type: bare_act
+    licence: govt-public
+    subject: LABOUR2
+    act:
+      short_title: Industrial Disputes Act
+      year: 1947
+      act_number: Act No. 14 of 1947
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/2154/1/A1947-14.pdf
+
+  - title: The Trade Unions Act, 1926
+    slug: trade-unions-act-1926
+    doc_type: bare_act
+    licence: govt-public
+    subject: LABOUR2
+    act:
+      short_title: Trade Unions Act
+      year: 1926
+      act_number: Act No. 16 of 1926
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/2312/1/A1926-16.pdf
+
+  - title: The Factories Act, 1948
+    slug: factories-act-1948
+    doc_type: bare_act
+    licence: govt-public
+    subject: LABOUR2
+    act:
+      short_title: Factories Act
+      year: 1948
+      act_number: Act No. 63 of 1948
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/1937/1/A1948-63.pdf
+
+  - title: The Industrial Relations Code, 2020
+    slug: ir-code-2020
+    doc_type: bare_act
+    licence: govt-public
+    subject: LABOUR2
+    act:
+      short_title: Industrial Relations Code
+      year: 2020
+      act_number: Act No. 35 of 2020
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/16819/1/A2020-35.pdf
+
+  - title: The Code on Wages, 2019
+    slug: wages-code-2019
+    doc_type: bare_act
+    licence: govt-public
+    subject: LABOUR2
+    act:
+      short_title: Code on Wages
+      year: 2019
+      act_number: Act No. 29 of 2019
+    fetch:
+      - https://egazette.gov.in/WriteReadData/2019/210356.pdf
+      - https://www.indiacode.nic.in/bitstream/123456789/11336/1/a2019-29.pdf
+
+  - title: The Code on Social Security, 2020
+    slug: social-security-code-2020
+    doc_type: bare_act
+    licence: govt-public
+    subject: LABOUR2
+    act:
+      short_title: Code on Social Security
+      year: 2020
+      act_number: Act No. 36 of 2020
+    fetch:
+      - https://www.indiacode.nic.in/bitstream/123456789/16823/1/aA2020-36.pdf
+      - https://www.labour.gov.in/static/uploads/2025/07/b0620548445580767b5c0d18c95c26f7.pdf
+
+  - title: The Occupational Safety, Health and Working Conditions Code, 2020
+    slug: osh-code-2020
+    doc_type: bare_act
+    licence: govt-public
+    subject: LABOUR2
+    act:
+      short_title: Occupational Safety, Health and Working Conditions Code
+      year: 2020
+      act_number: Act No. 37 of 2020
+    fetch:
+      - https://egazette.gov.in/WriteReadData/2020/222112.pdf
+      - https://dgfasli.gov.in/public/Admin/Cms/AllPdf/OSH_Gazette.pdf
+
+  # --- Public International Law -------------------------------------------
+  - title: Charter of the United Nations
+    slug: un-charter
+    doc_type: treaty
+    licence: public
+    subject: PIL
+    fetch:
+      - https://treaties.un.org/doc/publication/ctc/uncharter.pdf
+
+  - title: Statute of the International Court of Justice
+    slug: icj-statute
+    doc_type: treaty
+    licence: public
+    subject: PIL
+    fetch:
+      - https://legal.un.org/avl/pdf/ha/sicj/icj_statute_e.pdf
+
+  - title: Vienna Convention on the Law of Treaties, 1969
+    slug: vclt-1969
+    doc_type: treaty
+    licence: public
+    subject: PIL
+    fetch:
+      - https://legal.un.org/ilc/texts/instruments/english/conventions/1_1_1969.pdf
+
+  - title: Vienna Convention on Consular Relations, 1963
+    slug: vccr-1963
+    doc_type: treaty
+    licence: public
+    subject: PIL
+    note: Relevant to Jadhav (India v. Pakistan), ICJ 2019.
+    fetch:
+      - https://legal.un.org/ilc/texts/instruments/english/conventions/9_2_1963.pdf
+
+# ---------------------------------------------------------------------------
+# You supply these — they are not fetched.
+#
+# Drop the files into data/manual/ and fill in the entries. Assign the licence
+# yourself: that classification is a legal judgment call.
+#
+#  - title: Mumbai University LL.B. Semester V Syllabus
+#    slug: mu-llb-sem5-syllabus
+#    doc_type: syllabus
+#    licence: govt-public
+#    local_path: data/manual/mu-llb-sem5-syllabus.pdf
+#
+#  - title: CPC Question Paper, November 2024
+#    slug: cpc-pyq-2024-nov
+#    doc_type: pyq
+#    licence: govt-public
+#    subject: CPC
+#    local_path: data/manual/cpc-pyq-2024-nov.pdf
+#
+#  - title: Takwani, Civil Procedure
+#    slug: takwani-cpc
+#    doc_type: textbook
+#    licence: owned-licensed        # retrieval only; 200-char excerpt ceiling
+#    subject: CPC
+#    local_path: data/manual/takwani-cpc.pdf
+# ---------------------------------------------------------------------------
+# The current Sem V syllabus is supplied by you, not fetched.
+#
+# The Jan-2023 revision that mu.ac.in and college mirrors still host PREDATES the
+# BNSS/JJ/POCSO paper, so it would map topics to a syllabus that no longer applies.
+# Removed deliberately: a stale syllabus is worse than none, because every module and
+# topic downstream would silently inherit its errors.
+#
+# Add yours with:
+#   python -m ingest.add file data/manual/mu-llb-sem5-syllabus.pdf \
+#       --title "Mumbai University LL.B. Sem V Syllabus" --type syllabus \
+#       --licence govt-public
+manual: []

@@ -1,0 +1,27 @@
+# Render blueprint. Deploy with: New > Blueprint, point at this repo.
+#
+# NOTE ON THE DATABASE: this file deliberately does NOT define a Render Postgres.
+# Render's free Postgres is DELETED 30 days after creation, which would take the whole
+# corpus with it. Use Neon's free tier instead (persistent, 0.5GB, pgvector) and paste
+# its connection string into DATABASE_URL below.
+
+services:
+  - type: web
+    name: llbsutra
+    runtime: docker
+    dockerfilePath: ./deploy/Dockerfile
+    dockerContext: .
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      # From your Neon project. Must include ?sslmode=require
+      - key: DATABASE_URL
+        sync: false
+
+      # Set to "false" if the instance OOMs on the free plan. The site stays fully
+      # usable on keyword search; only semantic matching is lost.
+      - key: ENABLE_VECTOR_SEARCH
+        value: "true"
+
+      - key: PYTHONUNBUFFERED
+        value: "1"
