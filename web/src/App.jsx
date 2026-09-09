@@ -12,12 +12,48 @@ const TABS = [
   ['library', 'Library'],
 ];
 
+/**
+ * Theme: follow the system by default, remember an explicit choice.
+ *
+ * Stored per browser, so it never travels between devices — which is the right
+ * scope for a display preference on a site with no accounts.
+ */
+function useTheme() {
+  const [theme, setTheme] = useState(() => {
+    try {
+      return localStorage.getItem('theme') || 'system';
+    } catch {
+      return 'system'; // private mode / blocked storage
+    }
+  });
+
+  useEffect(() => {
+    const root = document.documentElement;
+    if (theme === 'system') root.removeAttribute('data-theme');
+    else root.setAttribute('data-theme', theme);
+    try {
+      if (theme === 'system') localStorage.removeItem('theme');
+      else localStorage.setItem('theme', theme);
+    } catch {
+      /* storage unavailable; the theme still applies for this session */
+    }
+  }, [theme]);
+
+  const prefersDark =
+    typeof window !== 'undefined' &&
+    window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+  const isDark = theme === 'dark' || (theme === 'system' && prefersDark);
+
+  return [isDark, () => setTheme(isDark ? 'light' : 'dark')];
+}
+
 export default function App() {
   // The hash is the router: it survives refresh and makes tabs linkable, without
   // pulling in a routing library for six views.
   const [tab, setTab] = useState(() => window.location.hash.slice(1) || 'home');
   const [query, setQuery] = useState('');
   const [subjects, setSubjects] = useState([]);
+  const [isDark, toggleTheme] = useTheme();
 
   useEffect(() => {
     getSubjects()
@@ -46,11 +82,21 @@ export default function App() {
     <>
       <header>
         <div className="wrap">
-          <div className="brand" onClick={() => go('home')}>
-            <h1>
-              LLB <span>Sutra</span>
-            </h1>
-            <small>MUMBAI UNIVERSITY · LL.B. SEMESTER V</small>
+          <div className="headrow">
+            <div className="brand" onClick={() => go('home')}>
+              <h1>
+                LLB <span>Sutra</span>
+              </h1>
+              <small>MUMBAI UNIVERSITY · LL.B. SEMESTER V</small>
+            </div>
+            <button
+              className="themebtn"
+              onClick={toggleTheme}
+              title={isDark ? 'Switch to light' : 'Switch to dark'}
+              aria-label={isDark ? 'Switch to light theme' : 'Switch to dark theme'}
+            >
+              {isDark ? '☀' : '☾'}
+            </button>
           </div>
           <nav>
             {TABS.map(([id, label]) => (
@@ -76,8 +122,11 @@ export default function App() {
       </main>
 
       <footer>
-        Bare acts from India Code · treaties from the UN · questions from past papers ·
-        every passage carries its citation
+        <div className="credit">Developed by Vitthal Mokhare</div>
+        <div>
+          Bare acts from India Code · treaties from the UN · questions from past papers ·
+          every passage carries its citation
+        </div>
       </footer>
     </>
   );
